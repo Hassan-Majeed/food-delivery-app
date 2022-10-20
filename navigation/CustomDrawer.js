@@ -253,7 +253,7 @@ const customDrawer = ({ selectedTab, setSelectedTab }) => {
           </View>
      )
 }
-
+// Redux Boiler Plate
 function mapStateToProps(state) {
      return {
           selectedTab: state.tabReducer.selectedTab
