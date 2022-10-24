@@ -33,7 +33,6 @@ import {
 } from '../constants';
 import { Header } from '../components';
 import LinearGradient from 'react-native-linear-gradient';
-import { ScrollView } from 'react-native-gesture-handler';
 const TabButton = ({ label, isFocused, icon, onPress, outerContainerStyle, innerContainerStyle }) => {
     return (
         <>
