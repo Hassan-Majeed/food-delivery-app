@@ -7,7 +7,7 @@ import {
     Image,
     FlatList
 } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import {
     COLORS,
     FONTS,
@@ -17,7 +17,6 @@ import {
     dummyData
 } from '../../constants';
 import { HorizontalFoodCard } from '../../components';
-import { color } from 'react-native-reanimated';
 // import HorizontalFoodCard from '../../components/HorizontalFoodCard';
 
 const Home = () => {
@@ -69,70 +68,79 @@ const Home = () => {
                 keyExtractor={item => `${item.id}`}
                 showsHorizontalScrollIndicator={false}
                 containerStyle={{
-                    marginTop: 30,
-                    marginBottom: 20
+                    marginTop: 60,
+                    marginBottom: 30
                 }}
                 renderItem={({ item, index }) => {
-                    <TouchableOpacity style={{
-                        marginLeft: SIZES.padding,
-                        marginRight: index == dummyData.menu.length - 1 ? SIZES.padding : 0
-                    }}
-                        onPress={() => {
-                            selectedMenuType(item.id)
-                            handleChangeCategory(selectedCategoryId, item.id)
-                        }}>
-                        <Text style={{
-                            color: selectedMenuType == item.id ? COLORS.primary : COLORS.black,
-                            ...FONTS.h3
-                        }}>{item.name}</Text>
-                        {console.log("item.name", item.name)}
-                    </TouchableOpacity>
+                    return (
+                        <TouchableOpacity style={{
+                            marginLeft: SIZES.padding,
+                            marginRight: index == dummyData.menu.length - 1 ? SIZES.padding : 0,
+                            marginTop: 30,
+                            marginBottom: 20
+                        }}
+                            onPress={() => {
+                                setSelectedMenuType(item.id)
+                                handleChangeCategory(selectedCategoryId, item.id)
+                            }}>
+                            <Text style={{
+                                color: selectedMenuType == item.id ? COLORS.primary : COLORS.black,
+                                ...FONTS.h3
+                            }}>
+                                {item.name}
+                            </Text>
+                        </TouchableOpacity>
+                    )
                 }}
             />
         )
     }
 
     return (
-        <View
-            style={{
-                flex: 1,
-            }}>
-            {/* search section */}
-            {renderSearch()}
-            {/* List Section */}
-            <FlatList
-                data={menuList}
-                keyExtractor={(item) => `${item.id}`}
-                showsVerticalScrollIndicator={false}
-                ListHeaderComponent={
-                    <View>
-                        {/* menu type  */}
-                        {renderMenuType()}
-                    </View>
+        <ScrollView showsVerticalScrollIndicator={true}>
+            <View
+                style={{
+                    flex: 1,
+                    marginBottom: 200,
+                }}>
+                {/* search section */}
+                {renderSearch()}
+                {/* List Section */}
+                <FlatList
+                    data={menuList}
+                    keyExtractor={(item) => `${item.id}`}
+                    showsVerticalScrollIndicator={false}
+                    ListHeaderComponent={
+                        <View>
+                            {/* menu type  */}
+                            {renderMenuType()}
+                        </View>
 
-                }
-                renderItem={({ item, index }) => {
-                    return (
-                        <HorizontalFoodCard
-                            containerStyle={{
-                                height: 130,
-                                alignItems: 'center',
-                                marginHorizontal: SIZES.padding,
-                                marginVertical: SIZES.radius,
-                            }}
-                            imageStyle={{
-                                marginTop: 20,
-                                height: 110,
-                                width: 110
-                            }}
-                            item={item}
-                            onPress={() => { console.log("HorizontalFoodCard") }}
-                        />
-                    )
-                }}
+                    }
+                    renderItem={({ item, index }) => {
+                        return (
+                            <HorizontalFoodCard
+                                containerStyle={{
+                                    height: 130,
+                                    alignItems: 'center',
+                                    marginHorizontal: SIZES.padding,
+                                    marginVertical: SIZES.radius,
+                                }}
+                                imageStyle={{
+                                    marginTop: 20,
+                                    height: 100,
+                                    width: 100,
+                                    borderRadius: 100,
+                                }}
+                                item={item}
+                                onPress={() => { console.log("HorizontalFoodCard") }}
+                            />
+                        )
+                    }}
 
-            />
-        </View>
+                />
+            </View>
+        </ScrollView>
     )
 }
 

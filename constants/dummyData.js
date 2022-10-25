@@ -68,26 +68,27 @@ const wrapSandwich = {
     image: require("../assets/dummyData/wrap_sandwich.png")
 }
 
+
 const menu = [
     {
         id: 1,
         name: "Featured",
         list: [
-            hamburger, hotTacos, vegBiryani,
+            hamburger, hotTacos, vegBiryani
         ]
     },
     {
         id: 2,
         name: "Nearby you",
         list: [
-            hamburger, vegBiryani, wrapSandwich,
+            vegBiryani, hamburger, wrapSandwich,
         ]
     },
     {
         id: 3,
         name: "Popular",
         list: [
-            hamburger, hotTacos, wrapSandwich,
+            wrapSandwich, hotTacos, hamburger,
         ]
     },
     {
@@ -101,14 +102,14 @@ const menu = [
         id: 5,
         name: "Trending",
         list: [
-            hamburger, vegBiryani, wrapSandwich,
+            vegBiryani, hamburger, wrapSandwich,
         ]
     },
     {
         id: 6,
         name: "Recommended",
         list: [
-            hamburger, hotTacos, wrapSandwich,
+            wrapSandwich, hamburger, hotTacos,
         ]
     },
 
