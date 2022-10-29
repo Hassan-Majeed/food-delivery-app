@@ -16,13 +16,39 @@ import {
     icons,
     dummyData
 } from '../../constants';
-import { HorizontalFoodCard } from '../../components';
-// import HorizontalFoodCard from '../../components/HorizontalFoodCard';
-
+import { HorizontalFoodCard, VerticalFoodCard } from '../../components';
+//  creating center component
+const Section = ({ title, onPress, children }) => {
+    return (
+        <View>
+            {/* Header section */}
+            <View style={{
+                flexDirection: 'row',
+                marginHorizontal: SIZES.padding,
+                marginTop: 30,
+                marginBottom: 20
+            }}>
+                <Text style={{
+                    flex: 1,
+                    ...FONTS.h3
+                }}>{title}</Text>
+                <TouchableOpacity
+                    style={{
+                        color: COLORS.primary,
+                        ...FONTS.body3
+                    }} onPress={onPress}><Text>Show All</Text></TouchableOpacity>
+            </View>
+            {/* Content section */}
+            {children}
+        </View>
+    )
+}
 const Home = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(1);
     const [selectedMenuType, setSelectedMenuType] = useState(1);
     const [menuList, setMenuList] = useState([]);
+    const [recomend, setRecomend] = useState([]);
+    const [popular, setPopular] = useState([]);
 
     useEffect(() => {
         handleChangeCategory(selectedCategoryId, selectedMenuType)
@@ -30,6 +56,17 @@ const Home = () => {
 
     // Handle Function
     function handleChangeCategory(categoryId, menuTypeId) {
+        // find the recomended menu  
+        let selectedPopular = dummyData.menu.find(a => a.name == "Popular");
+        // set the recomended menu based on the category Id
+        setPopular(selectedPopular?.list.filter(a => a.categories.includes(categoryId)));
+
+        // find the recomended menu  
+        let selectedRecommend = dummyData.menu.find(a => a.name == "Recommended");
+        // set the recomended menu based on the category Id
+        setRecomend(selectedRecommend?.list.filter(a => a.categories.includes(categoryId)));
+
+
         // find the menu based on te menu type id
         let selectedMenu = dummyData.menu.find(a => a.id == menuTypeId);
         // set the menu based on the category Id
@@ -95,13 +132,81 @@ const Home = () => {
             />
         )
     }
-
+    // renderRecomemndedSection
+    function renderRecomemndedSection() {
+        return (
+            <Section
+                title="Recommended"
+                onPress={console.log("pressed on show all")}>
+                <FlatList
+                    data={recomend}
+                    keyExtractor={item => `${item.id}`}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <HorizontalFoodCard
+                                containerStyle={{
+                                    height: 180,
+                                    width: SIZES.width * 0.85,
+                                    marginLeft: index == 0 ? SIZES.padding : 18,
+                                    marginRight: index == recomend.length - 1 ? SIZES.padding : 0,
+                                    paddingRight: SIZES.radius,
+                                    alignItems: 'center',
+                                }}
+                                imageStyle={{
+                                    marginTop: 35,
+                                    height: 150,
+                                    width: 150,
+                                }}
+                                item={item}
+                                onPress={() => { console.log("horizontal Food card") }}
+                            />
+                        )
+                    }}
+                />
+            </Section>
+        )
+    }
+    function renderPopularSection() {
+        return (
+            <Section
+                title="Popular Near You"
+                onPress={console.log("Show all Popular Items")}>
+                <FlatList
+                    data={popular}
+                    keyExtractor={item => `${item.id}`}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <VerticalFoodCard
+                                containerStyle={{
+                                    width: 200,
+                                    marginLeft: index == 0 ? SIZES.padding : 18,
+                                    marginRight: index == popular.length - 1 ? SIZES.padding : 0,
+                                    padding: SIZES.radius,
+                                    alignItems: 'center',
+                                }}
+                                imageStyle={{
+                                    marginTop: 35,
+                                    height: 150,
+                                    width: 150,
+                                }}
+                                item={item}
+                                onPress={() => { console.log("Vertical Food card") }}
+                            />
+                        )
+                    }}
+                />
+            </Section>
+        )
+    }
     return (
         <ScrollView showsVerticalScrollIndicator={true}>
             <View
                 style={{
                     flex: 1,
-                    marginBottom: 200,
                 }}>
                 {/* search section */}
                 {renderSearch()}
@@ -112,6 +217,10 @@ const Home = () => {
                     showsVerticalScrollIndicator={false}
                     ListHeaderComponent={
                         <View>
+                            {/* recomended popular Section */}
+                            {renderPopularSection()}
+                            {/* recomended section */}
+                            {renderRecomemndedSection()}
                             {/* menu type  */}
                             {renderMenuType()}
                         </View>
@@ -137,6 +246,9 @@ const Home = () => {
                             />
                         )
                     }}
+                    ListFooterComponent={
+                        <View style={{ height: 200 }} />
+                    }
 
                 />
             </View>
