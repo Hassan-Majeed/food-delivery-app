@@ -17,6 +17,7 @@ import {
     dummyData
 } from '../../constants';
 import { HorizontalFoodCard, VerticalFoodCard } from '../../components';
+import FilterModal from './FilterModal';
 //  creating center component
 const Section = ({ title, onPress, children }) => {
     return (
@@ -49,6 +50,7 @@ const Home = () => {
     const [menuList, setMenuList] = useState([]);
     const [recomend, setRecomend] = useState([]);
     const [popular, setPopular] = useState([]);
+    const [filterMoal, setShowfilterMoal] = useState(false);
 
     useEffect(() => {
         handleChangeCategory(selectedCategoryId, selectedMenuType)
@@ -90,7 +92,9 @@ const Home = () => {
                 {/* text input  */}
                 <TextInput placeholder='Search food...' style={{ flex: 1, marginLeft: SIZES.radius, ...FONTS.body3 }} />
                 {/* filter button */}
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => { setShowfilterMoal(true) }}
+                >
                     <Image source={icons.filter} style={{ height: 20, width: 20, tintColor: COLORS.black }} />
                 </TouchableOpacity>
 
@@ -202,6 +206,72 @@ const Home = () => {
             </Section>
         )
     }
+    function renderFoodCategories() {
+        return (
+            <FlatList
+                data={dummyData.categories}
+                keyExtractor={item => `${item.id}`}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => {
+                    return (
+                        <TouchableOpacity
+                            style={{
+                                flexDirection: 'row',
+                                height: 55,
+                                marginTop: SIZES.padding,
+                                marginLeft: index == 0 ? SIZES.padding : 0,
+                                paddingHorizontal: 8,
+                                borderRadius: SIZES.radius,
+                                marginRight: index == dummyData.categories.length - 1 ? 0 : SIZES.padding,
+                                backgroundColor: selectedCategoryId == item.id ? COLORS.primary : COLORS.lightGray2
+                            }}
+                            onPress={
+                                () => {
+                                    setSelectedCategoryId(item.id)
+                                    handleChangeCategory(item.id, selectedMenuType)
+                                }
+                            }
+                        >
+                            <Image source={item.icon}
+                                style={{
+                                    marginTop: 5,
+                                    height: 50,
+                                    width: 50
+                                }}
+                            />
+                            <Text style={{
+                                alignSelf: 'center',
+                                marginRight: SIZES.base,
+                                color: selectedCategoryId == item.id ? COLORS.white : COLORS.darkGray,
+                                ...FONTS.h3
+                            }}>{item.name}</Text>
+                        </TouchableOpacity>
+                    )
+                }}
+            />
+        )
+    }
+    function renderDeliveryTo() {
+        return (
+            <View style={{
+                marginTop: SIZES.padding,
+                marginHorizontal: SIZES.padding
+            }}>
+                <Text style={{
+                    color: COLORS.body3,
+                    ...FONTS.h3
+                }}>
+                    Delivery To
+                </Text>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: SIZES.base }}>
+                    <Text style={{ ...FONTS.h3 }}> {dummyData.myProfile.address}</Text>
+                    <Image source={icons.down_arrow} style={{ marginLeft: SIZES.base, height: 20, width: 20 }} />
+                </TouchableOpacity>
+            </View>
+
+        )
+    }
     return (
         <ScrollView showsVerticalScrollIndicator={true}>
             <View
@@ -210,6 +280,13 @@ const Home = () => {
                 }}>
                 {/* search section */}
                 {renderSearch()}
+                {/* Filter Modal */}
+                {
+                    setShowfilterMoal && <FilterModal
+                        isVisible={filterMoal}
+                        onClose={() => { setShowfilterMoal(false) }}
+                    />
+                }
                 {/* List Section */}
                 <FlatList
                     data={menuList}
@@ -217,6 +294,10 @@ const Home = () => {
                     showsVerticalScrollIndicator={false}
                     ListHeaderComponent={
                         <View>
+                            {/* Delivery To Section */}
+                            {renderDeliveryTo()}
+                            {/* food Category Section */}
+                            {renderFoodCategories()}
                             {/* recomended popular Section */}
                             {renderPopularSection()}
                             {/* recomended section */}

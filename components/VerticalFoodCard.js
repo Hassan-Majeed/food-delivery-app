@@ -26,35 +26,46 @@ const VerticalFoodCard = ({ containerStyle, item, onPress, imageStyle }) => {
                          alignItems: 'center',
                          ...containerStyle
                     }}>
-                    {/* image */}
-                    <Image source={item.image} style={imageStyle} />
-                    {/* info */}
+
+                    {/* calories & Fav */}
                     <View style={{
-                         flex: 1
+                         flexDirection: 'row'
                     }}>
-                         {/* name */}
-                         <Text style={{ ...FONTS.h3, fontSize: 17 }}> {item.name}</Text>
-                         {/* Desc */}
-                         <Text style={{ color: COLORS.darkGray2, ...FONTS.body4 }}> {item.description}</Text>
-                         {/* Price */}
-                         <Text style={{ marginTop: SIZES.base, ...FONTS.h2 }}> {item.price}</Text>
-                    </View>
-                    {/* calorie */}
-                    <View
-                         style={{
-                              flexDirection: 'row',
-                              position: 'absolute',
-                              top: 5,
-                              right: SIZES.radius
-                         }}>
-                         <Image source={icons.calories}
+                         {/* calories */}
+                         <View style={{ flex: 1, flexDirection: 'row' }}>
+                              <Image
+                                   source={icons.calories}
+                                   style={{ width: 30, height: 30 }}
+                              />
+                              <Text style={{ color: COLORS.darkGray2, ...FONTS.body5 }}>{item.calories}</Text>
+                         </View>
+                         {/* Favs */}
+                         <Image
+                              source={icons.love}
                               style={{
-                                   width: 30,
-                                   height: 30
+                                   width: 20,
+                                   height: 20,
+                                   tintColor: item.isFavourite ? COLORS.primary : COLORS.gray
                               }}
                          />
-                         <Text style={{ color: COLORS.darkGray2, ...FONTS.body5 }}> {item.calories}</Text>
                     </View>
+                    {/* Image */}
+                    <View style={{
+                         height: 150,
+                         width: 150,
+                         alignItems: 'center',
+                         justifyContent: 'center',
+                    }}>
+                         <Image source={item.image}
+                              style={{
+                                   height: '100%',
+                                   width: '100%'
+                              }} />
+                    </View>
+                    {/* Details */}
+                    <Text style={{ ...FONTS.h3 }}>{item.name}</Text>
+                    <Text style={{ color: COLORS.darkGray2, textAlign: 'center', ...FONTS.body5 }}>{item.description}</Text>
+                    <Text style={{ ...FONTS.h2, marginTop: SIZES.radius }}>{item.price}</Text>
                </TouchableOpacity>
           </>
      )
